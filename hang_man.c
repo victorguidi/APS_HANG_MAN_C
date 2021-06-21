@@ -1,6 +1,11 @@
+//REGRAS DO JOGO: Não pode ser palavra composta!
+// O jogo é Case Sensitive! Atente-se.
+//O jogo não aceita palavras com acento.
+
 #include <stdio.h>
 #include <string.h>
 
+//Função que cria o desenho do boneco da forca.
 void forcaDesenho(int estado) 
 {
     if (estado==0) {
@@ -77,25 +82,28 @@ void forcaDesenho(int estado)
 
 }
 
+//Função principal do jogo
+
 int main(){
-    //Pegando a palavra que vai rodar o jogo
+    //Pegando a palavra que vai iniciar o jogo
     char palavra[100];
     printf("Digite uma palavra: \n");
     gets(palavra);
 
-    //Criando uma máscara que vai cobrir as letras não advinhadas
-    //Para a máscara funcionar vamos utilizar uma lógica "booleana" que diz: 
+    //Cria-se uma máscara que vai cobrir as letras da palavra digitada
+    //Para a máscara funcionar vamos utilizar uma lógica que diz: 
     //A máscara só vai ser criada quando o jogador inserir uma palavra. 
-    //Portanto a lógica é que =0 ela não esta ativa =1 ela esta ativa
+    //Portanto em que mascara=0 ela não esta ativa mascara=1 ela esta ativa
 
     int num = strlen(palavra);
+    printf("A palavra tem %d letras\n", num);
     int mascara[num];
     for(int i = 0; i < num; i++){
         mascara[i]=0;
     }
 
-    //criando contador da forca
-    int forca=0, cont;
+    //criando contadores para a forca
+    int cont;
     int estadoForca=0;
 
     //Inicio do loop que vai rodar o jogo
@@ -103,43 +111,43 @@ int main(){
     while(! jogo){
         int estado=0;
         cont=0;
-        //Fazer com que no lugar das letras que não foram advinhadas insira-se um #
+
+        //Ativando a máscara e colocando no lugar das letras que não foram advinhadas um: _
         printf("A palavra eh: ");
         for(int j=0; j<num; j++){
             if(mascara[j]){
                 printf("%c", palavra[j]);
             }else {
-                printf("*");
+                printf("_ ");
             }
         }
         printf("\n");
 
         //Tentativas
         char letras;
+        printf("\n");
         printf("Digite uma letra: ");
         scanf(" %c", &letras);
 
 
-        //VERIFICANDO TODAS AS POSIÇÕES NA MÁSCARA QUE CORRESPONDEM COM A TENTATIVA
+        //VERIFICANDO TODAS AS POSIÇÕES NA PALAVRA QUE CORRESPONDEM COM A TENTATIVA
         for(int k=0; k<num; k++){
             if(letras == palavra[k]){
                 mascara[k]=1;
                 cont++;
-            }if(letras != palavra[k]){
-                    forca++;
-            }  
+            }
         }
         if(estado == cont){
             estadoForca++;
         }
+        //Chamando a função do desenho
         forcaDesenho(estadoForca);
         forcaDesenho;
+        printf("\n");
         
-        //printf("%d", forca);
-
         //criando as condiçoes para o jogo encerrar
         //jogo = 1 finaliza ganhador
-        //forca = 6 finaliza perdedor
+        //estadoForca = 6 finaliza perdedor
         jogo = 1;
         for(int l=0; l<num; l++){
             if(!mascara[l]){
@@ -147,15 +155,28 @@ int main(){
                 break;
             }
         }
-        if (forca >= 6*num){
+        if (estadoForca == 6){
                 break;
             }
     }
-    if(forca >= 6*num){
-        printf("Enforcado.... a palavra era: %s", palavra);
+    if(estadoForca == 6){
+        printf("Enforcado.... a palavra era: %s\n", palavra);
     }else{
-        printf("Parabens!! Voce escapou da forca... a palara era: %s", palavra);
+        printf("Parabens!! Voce escapou da forca... a palara era: %s\n", palavra);
     }
+    //replay();
 
     return 0;
 }
+
+
+/* void replay(){
+    printf("Jogar novamente? (s/n) \n");
+    char resposta;
+    scanf(" %c", &resposta);
+    if(resposta == 's'){
+        main();
+    }else{
+        return 0;
+    }
+} */
